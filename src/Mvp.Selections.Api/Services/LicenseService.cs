@@ -68,7 +68,7 @@ namespace Mvp.Selections.Api.Services
                 license.LicenseContent = patchLicenseBody.LicenseContent;
             }
 
-            if (patchLicenseBody.ExpirationDate != default)
+            if (patchLicenseBody.ExpirationDate.HasValue)
             {
                 license.ExpirationDate = (DateTime)patchLicenseBody.ExpirationDate;
             }
@@ -151,24 +151,6 @@ namespace Mvp.Selections.Api.Services
             result.StatusCode = HttpStatusCode.BadRequest;
             result.Messages.Add("License not found or the user does not hold MVP title for the current year. Please contact the admin via email");
             return result;
-        }
-
-        public async Task<LicenseWithUserInfo?> GetLicenseAsync(Guid id)
-        {
-            Domain.License? license = await licenseRepository.GetAsync(id);
-            if (license == null)
-            {
-                return null;
-            }
-
-            LicenseWithUserInfo result = new();
-            string? userName = null;
-            if (license.AssignedUserId.HasValue)
-            {
-                var user = await userService.GetAsync(license.AssignedUserId.Value);
-                userName = user?.Name;
-            }
-            return LicenseWithUserInfo.MapFromLicense(license, userName);
         }
 
         private async Task<List<Domain.License>> ExtractZipAsync(IFormFile zipFile)

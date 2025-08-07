@@ -1,7 +1,11 @@
-﻿    namespace Mvp.Selections.Api.Model
+﻿namespace Mvp.Selections.Api.Model
+{
+    public class PatchLicenseBody
     {
-        public class PatchLicenseBody(Guid id) : Domain.License(id)
-        {
-            public string? Email { get; set; } = string.Empty;
-        }
+        public string? LicenseContent { get; set; }
+
+        public DateTime? ExpirationDate { get; set; }
+
+        public string? Email { get; set; } = string.Empty;
     }
+}
